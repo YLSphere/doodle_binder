@@ -15,7 +15,7 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #00b894;
+    background-color: #37424d;
     color: white;
     border: none;
     border-radius: 5px;
@@ -23,7 +23,7 @@ button {
 }
 
 button:hover {
-    background-color: #00a085;
+    background-color: #283038;
 }
 
 button:disabled {
@@ -61,6 +61,7 @@ button:disabled {
     stroke-linejoin: round;
     opacity: 0;
     stroke-dasharray: 100 1300;
+    box-shadow: 0 0 10px 2px #f54b4b; 
     stroke-dashoffset: 0;
 }
 
@@ -181,19 +182,19 @@ button:disabled {
 }
 
 .action-buttons .run-it {
-    background-color: #ff4757;
+    background-color: #00b894;
     color: white;
 }
 
 .action-buttons .run-it:hover {
-    background-color: #e84118;
+    background-color: #018b70;
 }
 
 .action-buttons .im-good {
-    background-color: #57606f;
+    background-color: #ff4757;
     color: white;
 }
 
 .action-buttons .im-good:hover {
-    background-color: #37424d;
+    background-color: #e84118;
 }
