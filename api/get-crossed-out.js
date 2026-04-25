@@ -1,5 +1,9 @@
 import db from './firebase.js';
 
+console.log("PROJECT:", process.env.FIREBASE_PROJECT_ID);
+console.log("EMAIL:", process.env.FIREBASE_CLIENT_EMAIL);
+console.log("KEY EXISTS:", !!process.env.FIREBASE_PRIVATE_KEY);
+
 export default async function handler(req, res) {
   try {
     const docRef = db.collection('done-doodles').doc('done-doodles');
