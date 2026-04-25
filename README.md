@@ -1,2 +1,2 @@
-- Start app with python app.py
-- Go live and access through http://127.0.0.1:5500/
+Random number generator CS:GO Style to decide what people want to doodle in our pokemon doodle binder.
+Trying to fill the entire national pokedex with doodles and I needed a way to get randomized picks and a storage system for already done doodles.
