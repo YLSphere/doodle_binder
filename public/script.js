@@ -11,7 +11,7 @@ let idleFrame = null;
 let idleOffset = 0;
 let lastIdleTimestamp = null;
 const idleSpeed = 50; // px per second
-
+const SPIN_DURATION = 6000; // always same speed
 let removedNumbers = new Set();
 
 // Load crossed-out numbers from file
@@ -38,7 +38,7 @@ loadCrossedOutNumbers().then(() => {
 
 function renderNumberStrip() {
     numberStrip.innerHTML = '';
-    const allNumbers = Array.from({ length: 1028 }, (_, i) => i + 1);
+    const allNumbers = Array.from({ length: 1028 * 3 }, (_, i) => (i % 1028) + 1);
     allNumbers.forEach(num => {
         const span = document.createElement('span');
         span.className = 'number';
@@ -69,11 +69,11 @@ function scheduleIdle() {
     if (idleTimeout) {
         clearTimeout(idleTimeout);
     }
+
     idleTimeout = setTimeout(() => {
-        numberStrip.classList.add('idle');
         startIdle();
         idleTimeout = null;
-    }, 10000);
+    }, 10000); // shorter delay so it visibly resumes
 }
 
 function clearPostSpinActions() {
@@ -120,21 +120,44 @@ function showPostSpinActions(finalNum) {
 }
 
 function startIdle() {
-    if (idleFrame) {
-        return;
-    }
+    if (idleFrame) return;
+
     numberStrip.classList.add('idle');
+
     lastIdleTimestamp = null;
-    idleFrame = requestAnimationFrame(function step(timestamp) {
+
+    function step(timestamp) {
         if (!lastIdleTimestamp) {
             lastIdleTimestamp = timestamp;
         }
+
         const delta = (timestamp - lastIdleTimestamp) / 1000;
         lastIdleTimestamp = timestamp;
+
         idleOffset -= delta * idleSpeed;
-        numberStrip.style.setProperty('--idle-offset', `${idleOffset}px`);
+
+        numberStrip.style.transform = `translateX(${idleOffset}px)`;
+
         idleFrame = requestAnimationFrame(step);
-    });
+    }
+
+    idleFrame = requestAnimationFrame(step);
+}
+
+function stopIdle() {
+    numberStrip.classList.remove('idle');
+
+    if (idleTimeout) {
+        clearTimeout(idleTimeout);
+        idleTimeout = null;
+    }
+
+    if (idleFrame) {
+        cancelAnimationFrame(idleFrame);
+        idleFrame = null;
+    }
+
+    lastIdleTimestamp = null;
 }
 
 generateBtn.addEventListener('click', function() {
@@ -163,29 +186,65 @@ generateBtn.addEventListener('click', function() {
         generateBtn.disabled = false;
         return;
     }
-    const finalPosition = indicatorOffset - numberWidth / 2 - (finalNum - 1) * numberWidth;
+    const indexInMiddleCycle = 1028 + (finalNum - 1); // land in middle cycle
+
+    const targetOffset =
+        indicatorOffset -
+        numberWidth / 2 -
+        indexInMiddleCycle * numberWidth;
 
     // After the 1.5 second border animation completes, start the 5.5 second spin
     setTimeout(() => {
-        stopIdle();
-        numberStrip.classList.add('spinning');
-        numberStrip.style.setProperty('transition', 'none');
-        
-        // Calculate spin distance to ensure multiple full rotations
-        // Always spin at least 5-7 full cycles (5-7 * 1028 numbers) plus the final position
-        const fullRotations = 2; // 5-7 rotations
-        const spinDistance = fullRotations * 1028 * numberWidth;
-        const startOffset = spinDistance + finalPosition;
-        
-        numberStrip.style.setProperty('--base', `${startOffset}px`);
-        numberStrip.offsetWidth; // force reflow
-        
-        // Apply transition and animate to final position
-        numberStrip.style.removeProperty('transition');
-        requestAnimationFrame(() => {
-            numberStrip.style.setProperty('--base', `${finalPosition}px`);
-        });
-    }, 1500);
+    stopIdle();
+
+    const TOTAL = 1028;
+    const SPIN_CYCLES = 1;
+
+    const containerWidth = animationContainer.clientWidth;
+    const indicatorOffset = containerWidth / 2;
+
+    const targetIndex = SPIN_CYCLES * TOTAL + (finalNum - 1);
+
+    const startX = idleOffset || 0;
+    const endX =
+        indicatorOffset -
+        numberWidth / 2 -
+        targetIndex * numberWidth;
+
+    const startTime = performance.now();
+
+    function easeOutQuart(t) {
+        return 1 - Math.pow(1 - t, 4);
+    }
+
+    function animate(now) {
+        const t = Math.min((now - startTime) / SPIN_DURATION, 1);
+        const eased = easeOutQuart(t);
+
+        const x = startX + (endX - startX) * eased;
+
+        numberStrip.style.transform = `translateX(${x}px)`;
+
+        idleOffset = x; // keep idle state in sync
+
+        if (t < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            numberStrip.style.transform = `translateX(${endX}px)`;
+            idleOffset = endX;
+
+            resultDiv.innerText = `Pokémon #${finalNum}`;
+            generateBtn.disabled = false;
+            generateBtn.innerText = 'Pick your fate';
+
+            scheduleIdle(); // restart idle
+            showPostSpinActions(finalNum);
+        }
+    }
+
+    requestAnimationFrame(animate);
+
+}, 1500);
 
     // After animation ends
     setTimeout(() => {

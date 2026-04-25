@@ -91,17 +91,7 @@ button:disabled {
 #numberStrip {
     display: flex;
     height: 100%;
-    transition: transform 5.6s cubic-bezier(0.22, 1, 0.36, 1);
-    transform: translateX(calc(var(--base, 0px) + var(--idle-offset, 0px)));
-}
-
-#numberStrip.idle {
-    transition: none;
-}
-
-#numberStrip.spinning {
-    transform: translateX(var(--base, 0px)) !important;
-    transition: transform 5.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    will-change: transform;
 }
 
 .number {
