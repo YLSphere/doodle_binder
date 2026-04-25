@@ -109,7 +109,7 @@ function showPostSpinActions(finalNum) {
 
     const imGoodBtn = document.createElement('button');
     imGoodBtn.className = 'im-good';
-    imGoodBtn.innerText = "I'm good";
+    imGoodBtn.innerText = "yea i'm good dawg";
     imGoodBtn.addEventListener('click', () => {
         clearPostSpinActions();
     });
