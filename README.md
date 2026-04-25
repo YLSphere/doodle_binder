@@ -1,0 +1,2 @@
+- Start app with python app.py
+- Go live and access through http://127.0.0.1:5500/
