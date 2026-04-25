@@ -22,7 +22,14 @@ export default async function handler(req, res) {
     let numbers = [];
 
     if (doc.exists) {
-      numbers = doc.data().pokedex_num || [];
+      const data = doc.data();
+      if (Array.isArray(data?.pokedex_num)) {
+        numbers = data.pokedex_num;
+      } else if (data?.pokedex_num && typeof data.pokedex_num === 'object') {
+        numbers = Object.values(data.pokedex_num);
+      } else {
+        numbers = [];
+      }
     }
 
     if (!numbers.includes(number)) {
