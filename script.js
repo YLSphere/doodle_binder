@@ -93,7 +93,7 @@ function showPostSpinActions(finalNum) {
         
         // Save to crossed_out.json
         try {
-            await fetch('https://doodle-binder.vercel.app/api/add-crossed-out', {
+            await fetch('https://doodle-binder-ylspheres-projects.vercel.app/api/add-crossed-out', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ number: finalNum })
