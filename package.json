@@ -1,0 +1,15 @@
+{
+  "name": "doodle_binder",
+  "version": "1.0.0",
+  "description": "- Start app with python app.py\r - Go live and access through http://127.0.0.1:5500/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^13.8.0"
+  }
+}
