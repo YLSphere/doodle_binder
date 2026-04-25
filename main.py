@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import json
 import os
@@ -22,7 +22,7 @@ def save_crossed_out(data):
 
 @app.route('/')
 def index():
-    return "Doodle Binder Server Running"
+    return render_template('index.html')
 
 @app.route('/api/add-crossed-out', methods=['POST'])
 def add_crossed_out():
@@ -47,4 +47,4 @@ def add_crossed_out():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(debug=True)
