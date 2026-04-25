@@ -136,6 +136,14 @@ function startIdle() {
 
         idleOffset -= delta * idleSpeed;
 
+        const TOTAL = 1028;
+        const cycleWidth = TOTAL * numberWidth;
+
+        // keep within safe render range
+        if (idleOffset < -cycleWidth) {
+            idleOffset += cycleWidth;
+        }
+
         numberStrip.style.transform = `translateX(${idleOffset}px)`;
 
         idleFrame = requestAnimationFrame(step);
@@ -199,7 +207,7 @@ generateBtn.addEventListener('click', function() {
 
         const TOTAL = 1028;
         const SPIN_CYCLES = 1;
-
+        const cycleWidth = TOTAL * numberWidth;
         const containerWidth = animationContainer.clientWidth;
         const indicatorOffset = containerWidth / 2;
 
@@ -232,7 +240,7 @@ generateBtn.addEventListener('click', function() {
 
             numberStrip.style.transform = `translateX(${x}px)`;
 
-            idleOffset = x;
+            idleOffset = ((x % cycleWidth) + cycleWidth) % cycleWidth;
 
             if (t < 1) {
                 requestAnimationFrame(animate);
