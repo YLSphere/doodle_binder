@@ -24,7 +24,7 @@ def save_crossed_out(data):
 def index():
     return render_template('index.html')
 
-@app.route('/api/add-crossed-out', methods=['POST'])
+@app.route('/add-crossed-out', methods=['POST'])
 def add_crossed_out():
     """Add a number to the crossed out list"""
     try:
