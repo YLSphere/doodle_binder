@@ -211,15 +211,16 @@ generateBtn.addEventListener('click', function() {
         const containerWidth = animationContainer.clientWidth;
         const indicatorOffset = containerWidth / 2;
 
-        // ALWAYS FORCE FORWARD MOVEMENT (never backward)
-        const currentIndex = Math.abs(Math.round(-idleOffset / numberWidth));
+        // 🧠 SAFE current index (DO NOT use raw idleOffset anymore)
+        const currentIndex =
+            Math.floor(Math.abs(idleOffset) / numberWidth) % TOTAL;
 
         const targetIndex =
             currentIndex +
             (SPIN_CYCLES * TOTAL) +
-            (finalNum - 1 - (currentIndex % TOTAL));
+            ((finalNum - 1 - (currentIndex % TOTAL) + TOTAL) % TOTAL);
 
-        const startX = -currentIndex * numberWidth;
+        const startX = idleOffset;
 
         const endX =
             indicatorOffset -
@@ -238,14 +239,16 @@ generateBtn.addEventListener('click', function() {
 
             const x = startX + (endX - startX) * eased;
 
-            numberStrip.style.transform = `translateX(${x}px)`;
-
-            idleOffset = ((x % cycleWidth) + cycleWidth) % cycleWidth;
+            // 🎯 ONLY ONE SOURCE OF TRUTH
+            numberStrip.style.transform = `translate3d(${x}px, 0, 0)`;
 
             if (t < 1) {
                 requestAnimationFrame(animate);
             } else {
-                numberStrip.style.transform = `translateX(${endX}px)`;
+                // snap exactly
+                numberStrip.style.transform = `translate3d(${endX}px, 0, 0)`;
+
+                // ✅ IMPORTANT: resume idle from FINAL POSITION ONLY
                 idleOffset = endX;
 
                 resultDiv.innerText = `Pokémon #${finalNum}`;

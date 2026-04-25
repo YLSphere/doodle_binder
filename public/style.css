@@ -290,11 +290,15 @@ button:disabled {
 
     /* 🧠 Prevent GPU layer crashes on mobile */
     #numberStrip {
+        display: flex;
+        height: 100%;
         will-change: transform;
+
         transform: translate3d(0, 0, 0);
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
-        transform-style: flat;
+
+        transition: none !important;
     }
 
     /* 🚨 remove expensive shadows on mobile */
