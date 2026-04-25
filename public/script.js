@@ -195,56 +195,63 @@ generateBtn.addEventListener('click', function() {
 
     // After the 1.5 second border animation completes, start the 5.5 second spin
     setTimeout(() => {
-    stopIdle();
+        stopIdle();
 
-    const TOTAL = 1028;
-    const SPIN_CYCLES = 1;
+        const TOTAL = 1028;
+        const SPIN_CYCLES = 1;
 
-    const containerWidth = animationContainer.clientWidth;
-    const indicatorOffset = containerWidth / 2;
+        const containerWidth = animationContainer.clientWidth;
+        const indicatorOffset = containerWidth / 2;
 
-    const targetIndex = SPIN_CYCLES * TOTAL + (finalNum - 1);
+        // ALWAYS FORCE FORWARD MOVEMENT (never backward)
+        const currentIndex = Math.abs(Math.round(-idleOffset / numberWidth));
 
-    const startX = idleOffset || 0;
-    const endX =
-        indicatorOffset -
-        numberWidth / 2 -
-        targetIndex * numberWidth;
+        const targetIndex =
+            currentIndex +
+            (SPIN_CYCLES * TOTAL) +
+            (finalNum - 1 - (currentIndex % TOTAL));
 
-    const startTime = performance.now();
+        const startX = -currentIndex * numberWidth;
 
-    function easeOutQuart(t) {
-        return 1 - Math.pow(1 - t, 4);
-    }
+        const endX =
+            indicatorOffset -
+            numberWidth / 2 -
+            targetIndex * numberWidth;
 
-    function animate(now) {
-        const t = Math.min((now - startTime) / SPIN_DURATION, 1);
-        const eased = easeOutQuart(t);
+        const startTime = performance.now();
 
-        const x = startX + (endX - startX) * eased;
-
-        numberStrip.style.transform = `translateX(${x}px)`;
-
-        idleOffset = x; // keep idle state in sync
-
-        if (t < 1) {
-            requestAnimationFrame(animate);
-        } else {
-            numberStrip.style.transform = `translateX(${endX}px)`;
-            idleOffset = endX;
-
-            resultDiv.innerText = `Pokémon #${finalNum}`;
-            generateBtn.disabled = false;
-            generateBtn.innerText = 'Pick your fate';
-
-            scheduleIdle(); // restart idle
-            showPostSpinActions(finalNum);
+        function easeOutQuart(t) {
+            return 1 - Math.pow(1 - t, 4);
         }
-    }
 
-    requestAnimationFrame(animate);
+        function animate(now) {
+            const t = Math.min((now - startTime) / SPIN_DURATION, 1);
+            const eased = easeOutQuart(t);
 
-}, 1500);
+            const x = startX + (endX - startX) * eased;
+
+            numberStrip.style.transform = `translateX(${x}px)`;
+
+            idleOffset = x;
+
+            if (t < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                numberStrip.style.transform = `translateX(${endX}px)`;
+                idleOffset = endX;
+
+                resultDiv.innerText = `Pokémon #${finalNum}`;
+                generateBtn.disabled = false;
+                generateBtn.innerText = 'Pick your fate';
+
+                scheduleIdle();
+                showPostSpinActions(finalNum);
+            }
+        }
+
+        requestAnimationFrame(animate);
+
+    }, 1500);
 
     // After animation ends
     setTimeout(() => {

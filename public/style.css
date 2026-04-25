@@ -2,46 +2,225 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     margin: 50px;
-    background: linear-gradient(135deg, #74b9ff, #0984e3);
-    color: white;
     min-height: 100vh;
+
+    background: radial-gradient(circle at top, #0b1a2f 0%, #05070f 70%);
+    color: white;
 }
 
+/* 🔥 TITLE GLOW */
 h1 {
-    color: #fff;
+    color: #ffffff;
+    text-shadow:
+        0 0 6px #ff2b2b,
+        0 0 16px rgba(255, 43, 43, 0.6),
+        0 0 30px rgba(255, 43, 43, 0.3);
 }
 
+/* 💡 BUTTONS (NO SIZE CHANGE) */
 button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #37424d;
+
     color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+
+    /* brighter neon base */
+    background: linear-gradient(135deg, rgba(255, 43, 43, 0.35), rgba(30, 35, 60, 0.9));
+
+    border: 1px solid rgba(255, 43, 43, 0.6);
+    border-radius: 8px;
+
+    /* stronger glow so it pops */
+    box-shadow:
+        0 0 10px rgba(255, 43, 43, 0.35),
+        0 0 20px rgba(255, 43, 43, 0.2);
+
+    transition: all 0.25s ease;
+
+    text-shadow:
+        0 0 6px rgba(255, 255, 255, 0.3);
 }
 
 button:hover {
-    background-color: #283038;
+    background: rgba(30, 35, 60, 0.9);
+
+    box-shadow:
+        0 0 12px rgba(255, 43, 43, 0.35),
+        0 0 20px rgba(255, 43, 43, 0.2);
+
+    transform: translateY(-1px);
 }
 
 button:disabled {
-    background-color: #ccc;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
+/* 🎡 WHEEL CONTAINER (UNCHANGED SIZE) */
 #animationContainer {
     overflow: hidden;
+
     width: 100%;
     max-width: 600px;
     height: 100px;
+
     margin: 20px auto;
     position: relative;
-    border: 2px solid #fff;
+
+    border: 2px solid rgba(255, 255, 255, 0.25);
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
+
+    background-color: rgba(255, 255, 255, 0.05);
+
     box-sizing: border-box;
+
+    box-shadow:
+        0 0 18px rgba(255, 43, 43, 0.15),
+        inset 0 0 20px rgba(255, 255, 255, 0.03);
+}
+
+/* 🔴 CENTER INDICATOR (NO LAYOUT CHANGE) */
+#indicator {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+
+    transform: translateX(-50%);
+    z-index: 10;
+
+    background-color: #ff2b2b;
+
+    box-shadow:
+        0 0 6px #ff2b2b,
+        0 0 14px rgba(255, 43, 43, 0.8),
+        0 0 24px rgba(255, 43, 43, 0.4);
+}
+
+/* 🎞 STRIP (UNCHANGED BEHAVIOR) */
+#numberStrip {
+    display: flex;
+    height: 100%;
+    will-change: transform;
+
+    /* 🚨 force deterministic transform behavior */
+    transform: translateX(0px);
+}
+
+
+/* 🔢 NUMBER CELLS (UNCHANGED 80px WIDTH — IMPORTANT) */
+.number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 80px;   /* DO NOT CHANGE */
+    height: 100%;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    background-color: rgba(255, 255, 255, 0.06);
+    border-right: 2px solid rgba(255, 43, 43, 0.329);
+
+    box-sizing: border-box;
+    position: relative; 
+    flex-shrink: 0;
+    color: white;
+
+    text-shadow:
+        0 0 6px rgba(255, 255, 255, 0.25);
+}
+
+/* ❌ REMOVED NUMBERS */
+.number.removed {
+    opacity: 0.4;
+    color: #ff6b6b;
+    position: relative;
+}
+
+.number.removed::before,
+.number.removed::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 2px;
+    background: #ff6b6b;
+
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.5);
+}
+
+.number.removed::before {
+    transform: rotate(45deg);
+}
+
+.number.removed::after {
+    transform: rotate(-45deg);
+}
+
+/* 🎯 RESULT TEXT */
+#result {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+
+    color: white;
+
+    text-shadow:
+        0 0 10px #ff2b2b,
+        0 0 22px rgba(255, 43, 43, 0.4);
+}
+
+/* 🎮 ACTION BUTTONS */
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.action-buttons button {
+    padding: 10px 18px;
+    font-size: 16px;
+
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+/* 🟢 RUN IT */
+.action-buttons .run-it {
+    background: rgba(0, 184, 148, 0.85);
+
+    box-shadow:
+        0 0 10px rgba(0, 184, 148, 0.3);
+}
+
+.action-buttons .run-it:hover {
+    background: rgba(0, 184, 148, 1);
+
+    box-shadow:
+        0 0 16px rgba(0, 184, 148, 0.6);
+}
+
+/* 🔴 IM GOOD */
+.action-buttons .im-good {
+    background: rgba(255, 71, 87, 0.85);
+
+    box-shadow:
+        0 0 10px rgba(255, 71, 87, 0.3);
+}
+
+.action-buttons .im-good:hover {
+    background: rgba(255, 71, 87, 1);
+
+    box-shadow:
+        0 0 16px rgba(255, 71, 87, 0.6);
 }
 
 #animationContainer .borderSvg {
@@ -56,14 +235,28 @@ button:disabled {
 .border-path {
     fill: none;
     stroke: #ff2b2b;
-    stroke-width: 4;
+    stroke-width: 3;
     stroke-linecap: round;
     stroke-linejoin: round;
+
     opacity: 0;
+
     stroke-dasharray: 100 1300;
-    box-shadow: 0 0 10px 2px #f54b4b; 
     stroke-dashoffset: 0;
+
+    animation: pulse 1.5s infinite alternate;
+
+    /* ✨ soft edge */
+    filter: blur(0.6px);
+
+    /* 🔥 neon glow */
+    filter: 
+        blur(0.6px)
+        drop-shadow(0 0 2px #ff2b2b)
+        drop-shadow(0 0 5px #ff2b2b)
+        drop-shadow(0 0 10px rgba(255, 43, 43, 0.8));
 }
+
 
 .border-path.animate {
     opacity: 1;
@@ -86,105 +279,4 @@ button:disabled {
     100% {
         opacity: 0;
     }
-}
-
-#numberStrip {
-    display: flex;
-    height: 100%;
-    will-change: transform;
-}
-
-.number {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 100%;
-    font-size: 24px;
-    font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-right: 1px solid #fff;
-    flex-shrink: 0;
-    box-sizing: border-box;
-    position: relative;
-}
-
-.number.removed {
-    opacity: 0.5;
-    color: #ff6b6b;
-}
-
-.number.removed::before,
-.number.removed::after {
-    content: '';
-    position: absolute;
-    background-color: #ff6b6b;
-}
-
-.number.removed::before {
-    width: 60px;
-    height: 2px;
-    transform: rotate(45deg);
-}
-
-.number.removed::after {
-    width: 60px;
-    height: 2px;
-    transform: rotate(-45deg);
-}
-
-#indicator {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 2px;
-    height: 100%;
-    background-color: #ff6b6b;
-    transform: translateX(-50%);
-    z-index: 10;
-}
-
-#result {
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #fff;
-}
-
-.action-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-}
-
-.action-buttons button {
-    padding: 10px 18px;
-    font-size: 16px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
-}
-
-.action-buttons button:hover {
-    transform: translateY(-1px);
-}
-
-.action-buttons .run-it {
-    background-color: #00b894;
-    color: white;
-}
-
-.action-buttons .run-it:hover {
-    background-color: #018b70;
-}
-
-.action-buttons .im-good {
-    background-color: #ff4757;
-    color: white;
-}
-
-.action-buttons .im-good:hover {
-    background-color: #e84118;
 }
