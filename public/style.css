@@ -113,6 +113,10 @@ button:disabled {
     transform-style: preserve-3d;
 }
 
+#numberStrip {
+    isolation: isolate;
+}
+
 
 /* 🔢 NUMBER CELLS (UNCHANGED 80px WIDTH — IMPORTANT) */
 .number {
@@ -134,8 +138,8 @@ button:disabled {
     flex-shrink: 0;
     color: white;
 
-    text-shadow:
-        0 0 6px rgba(255, 255, 255, 0.25);
+    /* text-shadow: 0 0 6px rgba(255, 255, 255, 0.25); */
+    text-shadow: none;
 }
 
 /* ❌ REMOVED NUMBERS */
@@ -234,6 +238,9 @@ button:disabled {
     height: 100%;
     pointer-events: none;
     z-index: 7;
+}
+#animationContainer {
+    contain: layout paint size;
 }
 
 .border-path {
