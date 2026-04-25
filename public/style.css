@@ -113,10 +113,6 @@ button:disabled {
     transform-style: preserve-3d;
 }
 
-#numberStrip {
-    isolation: isolate;
-}
-
 
 /* 🔢 NUMBER CELLS (UNCHANGED 80px WIDTH — IMPORTANT) */
 .number {
@@ -138,8 +134,8 @@ button:disabled {
     flex-shrink: 0;
     color: white;
 
-    /* text-shadow: 0 0 6px rgba(255, 255, 255, 0.25); */
-    text-shadow: none;
+    text-shadow:
+        0 0 6px rgba(255, 255, 255, 0.25);
 }
 
 /* ❌ REMOVED NUMBERS */
@@ -239,9 +235,6 @@ button:disabled {
     pointer-events: none;
     z-index: 7;
 }
-#animationContainer {
-    contain: layout paint size;
-}
 
 .border-path {
     fill: none;
@@ -289,5 +282,45 @@ button:disabled {
     }
     100% {
         opacity: 0;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    /* 🧠 Prevent GPU layer crashes on mobile */
+    #numberStrip {
+        will-change: transform;
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        transform-style: flat;
+    }
+
+    /* 🚨 remove expensive shadows on mobile */
+    .number {
+        text-shadow: none;
+    }
+
+    /* 🚨 reduce glow complexity */
+    h1 {
+        text-shadow:
+            0 0 6px #ff2b2b;
+    }
+
+    /* 🚨 simplify container rendering */
+    #animationContainer {
+        box-shadow:
+            inset 0 0 10px rgba(255,255,255,0.02);
+    }
+
+    /* 🚨 disable heavy indicator glow */
+    #indicator {
+        box-shadow: none;
+    }
+
+    /* 🚨 reduce border SVG glow cost */
+    .border-path {
+        filter: none;
     }
 }
