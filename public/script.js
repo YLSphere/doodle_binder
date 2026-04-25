@@ -88,7 +88,7 @@ function showPostSpinActions(finalNum) {
 
     const runItBtn = document.createElement('button');
     runItBtn.className = 'run-it';
-    runItBtn.innerText = 'run it';
+    runItBtn.innerText = 'run it 🗣️';
     runItBtn.addEventListener('click', async () => {
         removedNumbers.add(finalNum);
         removeNumberFromPool(finalNum);
@@ -109,7 +109,7 @@ function showPostSpinActions(finalNum) {
 
     const imGoodBtn = document.createElement('button');
     imGoodBtn.className = 'im-good';
-    imGoodBtn.innerText = "yea i'm good dawg";
+    imGoodBtn.innerText = "yea i'm good dawg 💀";
     imGoodBtn.addEventListener('click', () => {
         clearPostSpinActions();
     });
