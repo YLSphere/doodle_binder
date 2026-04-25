@@ -105,8 +105,12 @@ button:disabled {
     height: 100%;
     will-change: transform;
 
-    /* 🚨 force deterministic transform behavior */
-    transform: translateX(0px);
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    /* 🔥 key fix for mobile flicker/disappearing */
+    transform-style: preserve-3d;
 }
 
 
